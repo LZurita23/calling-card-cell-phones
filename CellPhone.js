@@ -1,15 +1,11 @@
-const CallingCard = require('./CallingCard.js');
-
-class CellPhone extends CallingCard {
-
-    constructor (centsPerMinute, card){
-        super(centsPerMinute);
-
+class CellPhone {
+    constructor (card){
         this.card = card;
         this.phoneNumber = "";
         this.talking = false;
         this.minutesUsed = 0;
-        this.callHistory = "";        
+        this.callHistory = "";  
+        this.terminated = false;      
 
     }
 
@@ -22,12 +18,14 @@ class CellPhone extends CallingCard {
         return this.talking;
     }
 
-    tick() {
-        if(CallingCard.minutes <=0) {
-            this.endCall();
-        }else {
+    tick() {    
         this.minutesUsed ++;
-        CallingCard.minutes -= this.minutesUsed;
+        if (this.card.minutes <= 1){
+          this.card.minutes --;
+          this.terminated = true;
+          this.endCall();
+        } else {
+        this.card.minutes --;    
         }
     }
 
@@ -39,18 +37,23 @@ class CellPhone extends CallingCard {
         } else {
             minutes = "minutes";
         }
+        let terminateMessage = '';
+        if (this.terminated){
+           terminateMessage = 'cut off at '
+        }
+        
         if(this.callHistory.length > 1){
-            this.callHistory = this.callHistory.concat(", " + this.phoneNumber + " (" + this.minutesUsed + " " + minutes +")");
+            this.callHistory = this.callHistory.concat(", " + this.phoneNumber + " (" + terminateMessage + this.minutesUsed + " " + minutes +")");
         } 
         else {
-            this.callHistory = this.callHistory.concat(this.phoneNumber + " (" + this.minutesUsed + " " + minutes +")");
+            this.callHistory = this.callHistory.concat(this.phoneNumber + " (" + terminateMessage + this.minutesUsed + " " + minutes +")");
         }
         this.minutesUsed = 0;
        
     }
 
     getHistory() {        
-       console.log(this.callHistory);
+       return this.callHistory;
     }
 
 }

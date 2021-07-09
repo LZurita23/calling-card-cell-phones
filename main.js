@@ -1,30 +1,23 @@
+
+
 const CallingCard = require('./CallingCard.js');
 const CellPhone = require('./CellPhone.js');
 
-let card = new CallingCard(10);
-card.addDollars(1); // add 100 cents @ 10 cents/minute = 10 minutes added
+let card = new CallingCard(20);
+card.addDollars(1); // add 100 cents @ 20 cents/minute = 5 minutes added
+
 let phone = new CellPhone(card);
-
-phone.isTalking();  // => returns false
-
-phone.call("555-1212");
-phone.isTalking();  // => returns true
-phone.tick();       // simulate a minute going by
-phone.tick();       // simulate another minute going by
+phone.call("555-1111");
+phone.tick();       // 1 minute elapsed
+phone.tick();       // 2 minutes elapsed
 phone.endCall();
-phone.isTalking();  // => returns false (because the call is over)
-//phone.getHistory(); // => returns "555-1212 (2 minutes)"
 
- // => return 8, because the call lasted 2 minute
+phone.call("555-3333");
+phone.tick();       // 3 minutes elapsed
+phone.tick();       // 4 minutes elapsed
+phone.tick();       // this is the end of the 5th minute, so the call is ended
 
+phone.getHistory(); // => returns "555-1111 (2 minutes), 555-3333 (cut of at 3 minutes)"
 
-phone.isTalking();  // => returns false
-
-phone.call("555-1313");
-phone.isTalking();  // => returns true
-phone.tick();       // simulate a minute going by
-phone.tick();       // simulate another minute going by
-phone.tick();
-phone.tick();
-phone.endCall();
-phone.getHistory();
+card.getRemainingMinutes() // => returns 0, because all 5 minutes have been used up
+console.log(phone.getHistory());
