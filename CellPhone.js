@@ -4,36 +4,54 @@ class CellPhone extends CallingCard {
 
     constructor (centsPerMinute, card){
         super(centsPerMinute);
+
         this.card = card;
-        this.call = "";
-        this.isTalking = false;
-        this.getHistory = "";
-        this.tick = 0;
+        this.phoneNumber = "";
+        this.talking = false;
+        this.minutesUsed = 0;
+        this.callHistory = "";        
 
     }
 
-    call(number){
-        this.isTalking = true;
-        this.call = number;
-
+    call(phoneNumber){
+        this.talking = true;
+        this.phoneNumber = phoneNumber;
     }
+
     isTalking() {
-        return this.isTalking;
+        return this.talking;
     }
 
     tick() {
-        this.tick ++;
-        this.minutes -= tick;
+        if(CallingCard.minutes <=0) {
+            this.endCall();
+        }else {
+        this.minutesUsed ++;
+        CallingCard.minutes -= this.minutesUsed;
+        }
     }
 
     endCall() {
-        this.isTalking = false;
+        this.talking = false;
+        let minutes = "";
+        if(this.minutesUsed <= 1){
+            minutes = "minute";
+        } else {
+            minutes = "minutes";
+        }
+        if(this.callHistory.length > 1){
+            this.callHistory = this.callHistory.concat(", " + this.phoneNumber + " (" + this.minutesUsed + " " + minutes +")");
+        } 
+        else {
+            this.callHistory = this.callHistory.concat(this.phoneNumber + " (" + this.minutesUsed + " " + minutes +")");
+        }
+        this.minutesUsed = 0;
+       
     }
 
-    getHistory() {
-        //add code
+    getHistory() {        
+       console.log(this.callHistory);
     }
-
 
 }
 
